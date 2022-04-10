@@ -1,13 +1,26 @@
 package guru.springframework.sfgdi.config;
 
+import guru.springframework.sfgdi.datasource.FakeDataSource;
 import guru.springframework.sfgdi.repositories.EnglishGreetingRepository;
 import guru.springframework.sfgdi.repositories.EnglishGreetingRepositoryImpl;
 import guru.springframework.sfgdi.services.*;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.*;
 
+@EnableConfigurationProperties(SfgConastructorConfig.class)
 @ImportResource("classpath:sfgdi-config.xml")
 @Configuration
 public class GreetingServiceConfig {
+
+    @Bean
+    FakeDataSource fakeDataSource(SfgConastructorConfig sfgConastructorConfig) {
+        FakeDataSource fakeDataSource = new FakeDataSource();
+        fakeDataSource.setUsername(sfgConastructorConfig.getUsername());
+        fakeDataSource.setPassword(sfgConastructorConfig.getPassword());
+        fakeDataSource.setJdbcurl(sfgConastructorConfig.getJdbcurl());
+        return fakeDataSource;
+    }
 
     @Bean
     PetServiceFactory petServiceFactory() {
